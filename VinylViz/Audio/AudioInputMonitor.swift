@@ -40,7 +40,7 @@ class AudioInputMonitor: ObservableObject {
     private func setupAudioSessionAndEngine() {
         do {
             let audioSession = AVAudioSession.sharedInstance()
-            try audioSession.setCategory(.playAndRecord, mode: .measurement, options: [.mixWithOthers])
+            try audioSession.setCategory(.playAndRecord, mode: .measurement, options: [])
             try audioSession.setActive(true)
             
             self.setupAudioEngine()
