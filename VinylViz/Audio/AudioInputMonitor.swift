@@ -19,7 +19,12 @@ class AudioInputMonitor: ObservableObject {
     
     /// A boolean representing whether audio is on -- if a inputLevel of less than 0.1 is recorded 5 times in a row, this flips true
     @Published var audioOn: Bool = false
-
+    
+    // Do I need these variables below?
+    
+    /// A boolean represetning the state of setup for the monitor, managed by this class
+    var monitorSetup: Bool = false
+    
     init() {
         requestMicrophonePermission()
     }
@@ -38,6 +43,7 @@ class AudioInputMonitor: ObservableObject {
     }
     
     private func setupAudioSessionAndEngine() {
+        print("AudioInputMonitor::setupAudioSessionAndEngine()")
         do {
             let audioSession = AVAudioSession.sharedInstance()
             try audioSession.setCategory(.playAndRecord, mode: .measurement, options: [])
@@ -50,6 +56,7 @@ class AudioInputMonitor: ObservableObject {
     }
     
     private func setupAudioEngine() {
+        print("AudioInputMonitor::setupAudioEngine()")
         audioEngine = AVAudioEngine()
         
         guard let inputNode = audioEngine?.inputNode else {
@@ -58,6 +65,7 @@ class AudioInputMonitor: ObservableObject {
         }
 
         let recordingFormat = inputNode.outputFormat(forBus: 0)
+        self.monitorSetup = true
         inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { [weak self] (buffer, _) in
             self?.analyzeAudio(buffer: buffer)
         }
@@ -99,8 +107,20 @@ class AudioInputMonitor: ObservableObject {
             self.maxObservedLevel = max(self.maxObservedLevel, self.inputLevel)
         }
     }
-    
+
+    func toggleMonitoring() {
+        if self.monitorSetup {
+            self.stopMonitoring()
+        } else {
+            self.setupAudioSessionAndEngine()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                self.startMonitoring()
+            }
+        }
+    }
+
     func startMonitoring() {
+        print("AudioInputMonitor::startMonitoring()")
         do {
             try audioEngine?.start()
         } catch {
@@ -109,6 +129,8 @@ class AudioInputMonitor: ObservableObject {
     }
 
     func stopMonitoring() {
+        print("AudioInputMonitor::stopMonitoring()")
+        self.monitorSetup = false
         audioEngine?.stop()
         audioEngine?.inputNode.removeTap(onBus: 0)
         audioEngine = nil
