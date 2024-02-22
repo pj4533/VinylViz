@@ -19,14 +19,14 @@ class AudioInputMonitor: ObservableObject {
     
     /// A boolean representing whether audio is on -- if a inputLevel of less than 0.1 is recorded 5 times in a row, this flips true
     @Published var audioOn: Bool = false
+        
+    /// A status string message to display in the UI
+    @Published var statusString: String? = nil
     
-    // Do I need these variables below?
-    
-    /// A boolean represetning the state of setup for the monitor, managed by this class
-    var monitorSetup: Bool = false
+    /// A simple bool for if the engine is on, so I don't need to publish the entire engine variable
+    @Published var engineOn: Bool = false
     
     init() {
-        requestMicrophonePermission()
     }
     
     private func requestMicrophonePermission() {
@@ -65,7 +65,6 @@ class AudioInputMonitor: ObservableObject {
         }
 
         let recordingFormat = inputNode.outputFormat(forBus: 0)
-        self.monitorSetup = true
         inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { [weak self] (buffer, _) in
             self?.analyzeAudio(buffer: buffer)
         }
@@ -107,31 +106,34 @@ class AudioInputMonitor: ObservableObject {
             self.maxObservedLevel = max(self.maxObservedLevel, self.inputLevel)
         }
     }
-
-    func toggleMonitoring() {
-        if self.monitorSetup {
-            self.stopMonitoring()
-        } else {
-            self.setupAudioSessionAndEngine()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-                self.startMonitoring()
-            }
+    
+    private func startEngine() {
+        print("AudioInputMonitor::startEngine()")
+        do {
+            try audioEngine?.start()
+            self.engineOn = true
+        } catch {
+            self.engineOn = false
+            print("Error starting audio engine: \(error.localizedDescription)")
         }
     }
 
     func startMonitoring() {
         print("AudioInputMonitor::startMonitoring()")
-        do {
-            try audioEngine?.start()
-        } catch {
-            print("Error starting audio engine: \(error.localizedDescription)")
+        if self.audioEngine == nil {
+            self.statusString = "Initializing audio engine..."
+            requestMicrophonePermission()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                self.startEngine()
+                self.statusString = nil
+            }
         }
     }
 
     func stopMonitoring() {
         print("AudioInputMonitor::stopMonitoring()")
-        self.monitorSetup = false
         audioEngine?.stop()
+        self.engineOn = false
         audioEngine?.inputNode.removeTap(onBus: 0)
         audioEngine = nil
         do {
