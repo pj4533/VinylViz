@@ -12,6 +12,8 @@ struct VinylVizApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-        }.windowStyle(.volumetric)
+        }
+        .windowStyle(.volumetric)
+        .defaultSize(width: 1.5, height: 1.5, depth: 1.5, in: .meters)
     }
 }
