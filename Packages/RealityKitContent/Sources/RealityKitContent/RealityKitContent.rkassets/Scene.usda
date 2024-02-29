@@ -13,6 +13,8 @@ def Xform "Root"
     rel material:binding = None (
         bindMaterialAs = "weakerThanDescendants"
     )
+    float3 xformOp:translate = (0, 1.1, -0.5)
+    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
     def "GridMaterial" (
         active = true

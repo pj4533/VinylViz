@@ -12,7 +12,8 @@ import RealityKitContent
 struct AudioReactiveView: View {
     @ObservedObject var audioMonitor = AudioInputMonitor()
     @Environment(\.scenePhase) private var scenePhase
-    
+    @Environment(EntityModel.self) var model
+
     var effects: [AudioEffect] = [
         CloudsEffect(),
         MagicEffect()
@@ -24,10 +25,22 @@ struct AudioReactiveView: View {
                 if let scene = try? await Entity(named: "Scene", in: realityKitContentBundle) {
                     content.add(scene)
                 }
+                content.add(model.contentEntity)
             } update: { content in
                 for effect in self.effects {
                     effect.configure(content: content, using: self.audioMonitor)
                 }
+                model.configure(using: self.audioMonitor)
+            }
+            .task {
+                do {
+                    try await model.session.run([model.sceneReconstruction])
+                } catch {
+                    print("Failed to start session: \(error)")
+                }
+            }
+            .task { //}(priority: .low) {
+                await model.processReconstructionUpdates()
             }
             .opacity(audioMonitor.engineOn ? 1 : 0)
             .onChange(of: scenePhase, initial: true) { oldScenePhase, newScenePhase in
@@ -49,9 +62,9 @@ struct AudioReactiveView: View {
                     print("Unknown scene phase.")
                 }
             }
-            .gesture(TapGesture().targetedToAnyEntity().onEnded { _ in
-                print("TAPPED")
-            })
+//            .gesture(TapGesture().targetedToAnyEntity().onEnded { _ in
+//                print("TAPPED")
+//            })
             if let message = audioMonitor.statusString {
                 Label(message, systemImage: "exclamationmark.triangle")
                     .padding(12)

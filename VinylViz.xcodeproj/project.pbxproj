@@ -19,6 +19,7 @@
 		B04239562B85560F004C8F39 /* AudioEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04239512B85560F004C8F39 /* AudioEffect.swift */; };
 		B04239572B85560F004C8F39 /* MagicEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04239522B85560F004C8F39 /* MagicEffect.swift */; };
 		B0A2DD162B877B4C0032FBE0 /* AudioReactiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A2DD152B877B4C0032FBE0 /* AudioReactiveView.swift */; };
+		B0EE24262B911A99001AD834 /* EntityModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EE24252B911A99001AD834 /* EntityModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,7 @@
 		B04239512B85560F004C8F39 /* AudioEffect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioEffect.swift; sourceTree = "<group>"; };
 		B04239522B85560F004C8F39 /* MagicEffect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MagicEffect.swift; sourceTree = "<group>"; };
 		B0A2DD152B877B4C0032FBE0 /* AudioReactiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioReactiveView.swift; sourceTree = "<group>"; };
+		B0EE24252B911A99001AD834 /* EntityModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +92,7 @@
 		B00E178D2B8552D3003857AB /* VinylViz */ = {
 			isa = PBXGroup;
 			children = (
+				B0EE24242B911A78001AD834 /* Models */,
 				B0A2DD142B877B260032FBE0 /* RealityViews */,
 				B042394C2B85560F004C8F39 /* Audio */,
 				B042394F2B85560F004C8F39 /* Effects */,
@@ -151,6 +154,14 @@
 				B0A2DD152B877B4C0032FBE0 /* AudioReactiveView.swift */,
 			);
 			path = RealityViews;
+			sourceTree = "<group>";
+		};
+		B0EE24242B911A78001AD834 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				B0EE24252B911A99001AD834 /* EntityModel.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -259,6 +270,7 @@
 				B04239552B85560F004C8F39 /* CloudsEffect.swift in Sources */,
 				B04239532B85560F004C8F39 /* AudioInputMonitor.swift in Sources */,
 				B0A2DD162B877B4C0032FBE0 /* AudioReactiveView.swift in Sources */,
+				B0EE24262B911A99001AD834 /* EntityModel.swift in Sources */,
 				B04239572B85560F004C8F39 /* MagicEffect.swift in Sources */,
 				B00E17952B8552D3003857AB /* ContentView.swift in Sources */,
 				B04239562B85560F004C8F39 /* AudioEffect.swift in Sources */,

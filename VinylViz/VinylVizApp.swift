@@ -8,14 +8,15 @@
 import SwiftUI
 
 @main
+@MainActor
 struct VinylVizApp: App {
     @State private var immersionStyle: ImmersionStyle = .mixed
+    @State private var model = EntityModel()
 
     var body: some Scene {
         ImmersiveSpace {
             AudioReactiveView()
-                .position(x: 700.0, y: -900)
-                .offset(z: -900)
+                .environment(model)
         }
         .immersionStyle(selection: $immersionStyle, in: .mixed)
     }
