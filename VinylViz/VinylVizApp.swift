@@ -9,11 +9,14 @@ import SwiftUI
 
 @main
 struct VinylVizApp: App {
+    @State private var immersionStyle: ImmersionStyle = .mixed
+
     var body: some Scene {
-        WindowGroup {
-            ContentView()
+        ImmersiveSpace {
+            AudioReactiveView()
+                .position(x: 700.0, y: -900)
+                .offset(z: -900)
         }
-        .windowStyle(.volumetric)
-        .defaultSize(width: 1.5, height: 1.5, depth: 1.5, in: .meters)
+        .immersionStyle(selection: $immersionStyle, in: .mixed)
     }
 }

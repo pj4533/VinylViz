@@ -19,7 +19,7 @@ struct AudioReactiveView: View {
     ]
     
     var body: some View {
-        ZStack(alignment: Alignment(horizontal: .center, vertical: .bottom)) {
+        VStack {
             RealityView { content in
                 if let scene = try? await Entity(named: "Scene", in: realityKitContentBundle) {
                     content.add(scene)
@@ -55,6 +55,7 @@ struct AudioReactiveView: View {
             if let message = audioMonitor.statusString {
                 Label(message, systemImage: "exclamationmark.triangle")
                     .padding(12)
+                    .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
                     .glassBackgroundEffect(in: .rect(cornerRadius: 50))
                     .opacity(audioMonitor.statusString != nil ? 1 : 0)
                     .animation(.easeInOut, value: audioMonitor.statusString != nil)
