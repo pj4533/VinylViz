@@ -9,7 +9,7 @@ reorder rootPrims = ["Root", "GridMaterial"]
 
 def Xform "Root"
 {
-    reorder nameChildren = ["GridMaterial", "Magic", "Sparks", "Clouds"]
+    reorder nameChildren = ["GridMaterial", "Magic", "AudioGeometryMaterial", "AudioGeometryMaterialCube", "Clouds"]
     rel material:binding = None (
         bindMaterialAs = "weakerThanDescendants"
     )
@@ -279,6 +279,353 @@ def Xform "Root"
         def RealityKitComponent "InputTarget"
         {
             uniform token info:id = "RealityKit.InputTarget"
+        }
+    }
+
+    def Material "AudioGeometryMaterial"
+    {
+        float inputs:audioLevel = 1 (
+            customData = {
+                dictionary realitykit = {
+                    float2 positionInSubgraph = (-1229.4531, -160.72266)
+                    float2 sizeInSubgraph = (134.5, 53)
+                    int stackingOrderInSubgraph = 555
+                }
+            }
+        )
+        float inputs:diminish = 0.5 (
+            customData = {
+                dictionary realitykit = {
+                    float2 positionInSubgraph = (-1227.1016, -87.91406)
+                    float2 sizeInSubgraph = (120.5, 53)
+                    int stackingOrderInSubgraph = 460
+                }
+            }
+        )
+        float inputs:lacunarity = 2 (
+            customData = {
+                dictionary realitykit = {
+                    float2 positionInSubgraph = (-1230.1562, -234.69531)
+                    float2 sizeInSubgraph = (129.5, 53)
+                    int stackingOrderInSubgraph = 225
+                }
+            }
+        )
+        prepend token outputs:mtlx:surface.connect = </Root/AudioGeometryMaterial/PreviewSurface.outputs:out>
+        token outputs:realitykit:vertex.connect = </Root/AudioGeometryMaterial/GeometryModifier.outputs:out>
+        float2 ui:nodegraph:realitykit:subgraphOutputs:pos = (299.25, 99.5)
+        float2 ui:nodegraph:realitykit:subgraphOutputs:size = (181.5, 99)
+
+        def Shader "PreviewSurface"
+        {
+            uniform token info:id = "ND_UsdPreviewSurface_surfaceshader"
+            float inputs:clearcoat = 0
+            float inputs:clearcoatRoughness
+            color3f inputs:diffuseColor.connect = </Root/AudioGeometryMaterial/Overlay.outputs:out>
+            color3f inputs:emissiveColor = (0, 0, 0) (
+                colorSpace = "srgb_displayp3"
+            )
+            float inputs:ior
+            float inputs:metallic = 0
+            float3 inputs:normal = (0, 0, 1)
+            float inputs:opacity = 1
+            float inputs:opacity.connect = None
+            float inputs:opacityThreshold
+            float inputs:roughness = 0.5
+            token outputs:out
+            float2 ui:nodegraph:node:pos = (24.421875, -97.78516)
+            float2 ui:nodegraph:node:size = (148.5, 199)
+            int ui:nodegraph:node:stackingOrder = 559
+            string[] ui:nodegraph:realitykit:node:attributesShowingChildren = ["inputs:emissiveColor", "inputs:opacity", "inputs:normal"]
+        }
+
+        def NodeGraph "tan_color"
+        {
+            color3f outputs:output_color (
+                customData = {
+                    dictionary realitykit = {
+                        int stackingOrderInSubgraph = 556
+                    }
+                }
+            )
+            color3f outputs:output_color.connect = </Root/AudioGeometryMaterial/tan_color/Constant_1.outputs:out>
+            float2 ui:nodegraph:node:pos = (-808.7492, -213.62032)
+            float2 ui:nodegraph:node:size = (111, 81)
+            int ui:nodegraph:node:stackingOrder = 510
+            float2 ui:nodegraph:realitykit:subgraphOutputs:pos = (1005.3789, 67.59375)
+            float2 ui:nodegraph:realitykit:subgraphOutputs:size = (205.5, 81)
+            int ui:nodegraph:realitykit:subgraphOutputs:stackingOrder = 558
+
+            def Shader "Remap"
+            {
+                uniform token info:id = "ND_remap_float"
+                float inputs:in.connect = </Root/AudioGeometryMaterial/tan_color/Tan.outputs:out>
+                float inputs:inhigh
+                float inputs:inlow
+                float inputs:outhigh = 0.9
+                float inputs:outlow = 0.2
+                float outputs:out
+                float2 ui:nodegraph:node:pos = (405.5, 90.5)
+                float2 ui:nodegraph:node:size = (94, 181)
+                int ui:nodegraph:node:stackingOrder = 556
+                string[] ui:nodegraph:realitykit:node:attributesShowingChildren = ["inputs:inhigh"]
+            }
+
+            def Shader "Tan"
+            {
+                uniform token info:id = "ND_tan_float"
+                float inputs:in.connect = </Root/AudioGeometryMaterial/tan_color/Time.outputs:out>
+                float outputs:out
+                float2 ui:nodegraph:node:pos = (240.5, 90.5)
+                float2 ui:nodegraph:node:size = (116, 40)
+                int ui:nodegraph:node:stackingOrder = 556
+            }
+
+            def Shader "Time"
+            {
+                uniform token info:id = "ND_time_float"
+                float outputs:out
+                float2 ui:nodegraph:node:pos = (61.25, 90.5)
+                float2 ui:nodegraph:node:size = (122.5, 53)
+                int ui:nodegraph:node:stackingOrder = 556
+            }
+
+            def Shader "Fractal3D"
+            {
+                uniform token info:id = "ND_fractal3d_color3"
+                float3 inputs:amplitude
+                float inputs:diminish.connect = </Root/AudioGeometryMaterial/tan_color/Remap.outputs:out>
+                float inputs:lacunarity = 2
+                float3 inputs:position
+                color3f outputs:out
+                float2 ui:nodegraph:node:pos = (577.75, 90.5)
+                float2 ui:nodegraph:node:size = (130.5, 181)
+                int ui:nodegraph:node:stackingOrder = 556
+                string[] ui:nodegraph:realitykit:node:attributesShowingChildren = ["inputs:position", "inputs:lacunarity"]
+            }
+
+            def Shader "Constant_1"
+            {
+                uniform token info:id = "ND_constant_color3"
+                color3f inputs:value = (0, 0, 0)
+                color3f inputs:value.connect = </Root/AudioGeometryMaterial/tan_color/Fractal3D.outputs:out>
+                color3f outputs:out
+                float2 ui:nodegraph:node:pos = (780.5, 90.5)
+                float2 ui:nodegraph:node:size = (155, 53)
+                int ui:nodegraph:node:stackingOrder = 556
+            }
+        }
+
+        def NodeGraph "sin_color"
+        {
+            color3f outputs:output_color (
+                customData = {
+                    dictionary realitykit = {
+                        int stackingOrderInSubgraph = 556
+                    }
+                }
+            )
+            color3f outputs:output_color.connect = </Root/AudioGeometryMaterial/sin_color/Constant_1.outputs:out>
+            float2 ui:nodegraph:node:pos = (-814.4289, -75.526566)
+            float2 ui:nodegraph:node:size = (109, 81)
+            int ui:nodegraph:node:stackingOrder = 481
+            string[] ui:nodegraph:realitykit:node:attributesShowingChildren = ["outputs:output_color"]
+            float2 ui:nodegraph:realitykit:subgraphOutputs:pos = (1005.3789, 67.59375)
+            float2 ui:nodegraph:realitykit:subgraphOutputs:size = (205.5, 81)
+            int ui:nodegraph:realitykit:subgraphOutputs:stackingOrder = 558
+
+            def Shader "Remap"
+            {
+                uniform token info:id = "ND_remap_float"
+                float inputs:in.connect = </Root/AudioGeometryMaterial/sin_color/Sin.outputs:out>
+                float inputs:inhigh
+                float inputs:inlow
+                float inputs:outhigh = 0.9
+                float inputs:outlow = 0.2
+                float outputs:out
+                float2 ui:nodegraph:node:pos = (405.5, 90.5)
+                float2 ui:nodegraph:node:size = (94, 181)
+                int ui:nodegraph:node:stackingOrder = 558
+                string[] ui:nodegraph:realitykit:node:attributesShowingChildren = ["inputs:inhigh"]
+            }
+
+            def Shader "Time"
+            {
+                uniform token info:id = "ND_time_float"
+                float outputs:out
+                float2 ui:nodegraph:node:pos = (61.25, 90.5)
+                float2 ui:nodegraph:node:size = (122.5, 53)
+                int ui:nodegraph:node:stackingOrder = 556
+            }
+
+            def Shader "Fractal3D"
+            {
+                uniform token info:id = "ND_fractal3d_color3"
+                float3 inputs:amplitude
+                float inputs:diminish.connect = </Root/AudioGeometryMaterial/sin_color/Remap.outputs:out>
+                float inputs:lacunarity = 2
+                float3 inputs:position
+                color3f outputs:out
+                float2 ui:nodegraph:node:pos = (577.75, 90.5)
+                float2 ui:nodegraph:node:size = (130.5, 181)
+                int ui:nodegraph:node:stackingOrder = 556
+                string[] ui:nodegraph:realitykit:node:attributesShowingChildren = ["inputs:position", "inputs:lacunarity"]
+            }
+
+            def Shader "Constant_1"
+            {
+                uniform token info:id = "ND_constant_color3"
+                color3f inputs:value = (0, 0, 0)
+                color3f inputs:value.connect = </Root/AudioGeometryMaterial/sin_color/Fractal3D.outputs:out>
+                color3f outputs:out
+                float2 ui:nodegraph:node:pos = (780.5, 90.5)
+                float2 ui:nodegraph:node:size = (155, 53)
+                int ui:nodegraph:node:stackingOrder = 556
+            }
+
+            def Shader "Sin"
+            {
+                uniform token info:id = "ND_sin_float"
+                float inputs:in.connect = </Root/AudioGeometryMaterial/sin_color/Time.outputs:out>
+                float outputs:out
+                float2 ui:nodegraph:node:pos = (245.6289, 91.14453)
+                float2 ui:nodegraph:node:size = (116, 40)
+                int ui:nodegraph:node:stackingOrder = 557
+            }
+        }
+
+        def Shader "Plus"
+        {
+            uniform token info:id = "ND_plus_color3"
+            color3f inputs:bg.connect = </Root/AudioGeometryMaterial/sin_color.outputs:output_color>
+            color3f inputs:fg.connect = </Root/AudioGeometryMaterial/cos_color.outputs:output_color>
+            float inputs:mix = 0.5
+            float inputs:mix.connect = None
+            color3f outputs:out
+            float2 ui:nodegraph:node:pos = (-579.14453, 121.34375)
+            float2 ui:nodegraph:node:size = (109, 145)
+            int ui:nodegraph:node:stackingOrder = 557
+            string[] ui:nodegraph:realitykit:node:attributesShowingChildren = ["inputs:mix"]
+        }
+
+        def NodeGraph "cos_color"
+        {
+            color3f outputs:output_color (
+                customData = {
+                    dictionary realitykit = {
+                        int stackingOrderInSubgraph = 556
+                    }
+                }
+            )
+            color3f outputs:output_color.connect = </Root/AudioGeometryMaterial/cos_color/Constant_1.outputs:out>
+            float2 ui:nodegraph:node:pos = (-650.9992, -268.7492)
+            float2 ui:nodegraph:node:size = (113, 81)
+            int ui:nodegraph:node:stackingOrder = 519
+            float2 ui:nodegraph:realitykit:subgraphOutputs:pos = (1005.3789, 67.59375)
+            float2 ui:nodegraph:realitykit:subgraphOutputs:size = (205.5, 81)
+            int ui:nodegraph:realitykit:subgraphOutputs:stackingOrder = 558
+
+            def Shader "Remap"
+            {
+                uniform token info:id = "ND_remap_float"
+                float inputs:in.connect = </Root/AudioGeometryMaterial/cos_color/Cos.outputs:out>
+                float inputs:inhigh
+                float inputs:inlow
+                float inputs:outhigh = 0.9
+                float inputs:outlow = 0.2
+                float outputs:out
+                float2 ui:nodegraph:node:pos = (405.5, 90.5)
+                float2 ui:nodegraph:node:size = (94, 181)
+                int ui:nodegraph:node:stackingOrder = 556
+                string[] ui:nodegraph:realitykit:node:attributesShowingChildren = ["inputs:inhigh"]
+            }
+
+            def Shader "Time"
+            {
+                uniform token info:id = "ND_time_float"
+                float outputs:out
+                float2 ui:nodegraph:node:pos = (61.25, 90.5)
+                float2 ui:nodegraph:node:size = (122.5, 53)
+                int ui:nodegraph:node:stackingOrder = 556
+            }
+
+            def Shader "Fractal3D"
+            {
+                uniform token info:id = "ND_fractal3d_color3"
+                float3 inputs:amplitude
+                float inputs:diminish.connect = </Root/AudioGeometryMaterial/cos_color/Remap.outputs:out>
+                float inputs:lacunarity = 2
+                float3 inputs:position
+                color3f outputs:out
+                float2 ui:nodegraph:node:pos = (577.75, 90.5)
+                float2 ui:nodegraph:node:size = (130.5, 181)
+                int ui:nodegraph:node:stackingOrder = 556
+                string[] ui:nodegraph:realitykit:node:attributesShowingChildren = ["inputs:position", "inputs:lacunarity"]
+            }
+
+            def Shader "Constant_1"
+            {
+                uniform token info:id = "ND_constant_color3"
+                color3f inputs:value = (0, 0, 0)
+                color3f inputs:value.connect = </Root/AudioGeometryMaterial/cos_color/Fractal3D.outputs:out>
+                color3f outputs:out
+                float2 ui:nodegraph:node:pos = (780.5, 90.5)
+                float2 ui:nodegraph:node:size = (155, 53)
+                int ui:nodegraph:node:stackingOrder = 556
+            }
+
+            def Shader "Cos"
+            {
+                uniform token info:id = "ND_cos_float"
+                float inputs:in.connect = </Root/AudioGeometryMaterial/cos_color/Time.outputs:out>
+                float outputs:out
+                float2 ui:nodegraph:node:pos = (231.91797, 89.35547)
+                float2 ui:nodegraph:node:size = (116, 40)
+                int ui:nodegraph:node:stackingOrder = 557
+            }
+        }
+
+        def Shader "Overlay"
+        {
+            uniform token info:id = "ND_overlay_color3"
+            color3f inputs:bg.connect = </Root/AudioGeometryMaterial/cos_color.outputs:output_color>
+            color3f inputs:fg.connect = </Root/AudioGeometryMaterial/Plus.outputs:out>
+            float inputs:mix = 0.5
+            float inputs:mix.connect = None
+            color3f outputs:out
+            float2 ui:nodegraph:node:pos = (-428.92578, -117.39844)
+            float2 ui:nodegraph:node:size = (109, 145)
+            int ui:nodegraph:node:stackingOrder = 553
+            string[] ui:nodegraph:realitykit:node:attributesShowingChildren = ["outputs:out"]
+        }
+    }
+
+    def Cube "AudioGeometryMaterialCube" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </Root/AudioGeometryMaterial> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        double size = 0.2
+
+        def Material "DefaultMaterial"
+        {
+            prepend token outputs:surface.connect = </Root/AudioGeometryMaterialCube/DefaultMaterial/DefaultSurfaceShader.outputs:surface>
+
+            def Shader "DefaultSurfaceShader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (1, 1, 1)
+                float inputs:roughness = 0.75
+                token outputs:surface
+            }
+        }
+
+        def RealityKitComponent "HierarchicalFade"
+        {
+            uniform token info:id = "RealityKit.HierarchicalFade"
+            float opacity = 0
         }
     }
 }

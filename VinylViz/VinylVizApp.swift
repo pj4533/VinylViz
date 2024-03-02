@@ -11,7 +11,7 @@ import SwiftUI
 @MainActor
 struct VinylVizApp: App {
     @State private var immersionStyle: ImmersionStyle = .mixed
-    @State private var model = EntityModel()
+    @State private var model = SessionManager()
 
     var body: some Scene {
         ImmersiveSpace {

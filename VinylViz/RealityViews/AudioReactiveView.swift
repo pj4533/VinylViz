@@ -12,7 +12,8 @@ import RealityKitContent
 struct AudioReactiveView: View {
     @ObservedObject var audioMonitor = AudioInputMonitor()
     @Environment(\.scenePhase) private var scenePhase
-    @Environment(EntityModel.self) var model
+    @Environment(SessionManager.self) var model
+    
 
     var effects: [AudioEffect] = [
         CloudsEffect(),
@@ -25,22 +26,35 @@ struct AudioReactiveView: View {
                 if let scene = try? await Entity(named: "Scene", in: realityKitContentBundle) {
                     content.add(scene)
                 }
+                
+                if let entity = content.entities.first?.findEntity(named: "AudioGeometryMaterialCube") {
+                    if let modelComponent = entity.components[ModelComponent.self] {
+                        model.customMaterial = modelComponent.materials.first as? ShaderGraphMaterial
+                    } else {
+                        print("could not find component")
+                    }
+                } else {
+                    print("could not find geometry material cube")
+                }
+
                 content.add(model.contentEntity)
             } update: { content in
                 for effect in self.effects {
                     effect.configure(content: content, using: self.audioMonitor)
-                }
-                model.configure(using: self.audioMonitor)
+                }                
             }
             .task {
                 do {
-                    try await model.session.run([model.sceneReconstruction])
+                    try await model.session.run([model.planeDetection])
                 } catch {
                     print("Failed to start session: \(error)")
                 }
             }
             .task { //}(priority: .low) {
                 await model.processReconstructionUpdates()
+            }
+            .task {
+                await model.processPlaneDetectionUpdates()
             }
             .opacity(audioMonitor.engineOn ? 1 : 0)
             .onChange(of: scenePhase, initial: true) { oldScenePhase, newScenePhase in

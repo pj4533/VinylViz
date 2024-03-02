@@ -18,8 +18,13 @@
 		B04239552B85560F004C8F39 /* CloudsEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04239502B85560F004C8F39 /* CloudsEffect.swift */; };
 		B04239562B85560F004C8F39 /* AudioEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04239512B85560F004C8F39 /* AudioEffect.swift */; };
 		B04239572B85560F004C8F39 /* MagicEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04239522B85560F004C8F39 /* MagicEffect.swift */; };
+		B067214D2B92B7390078F143 /* MeshResource+Contents.swift in Sources */ = {isa = PBXBuildFile; fileRef = B067214C2B92B7390078F143 /* MeshResource+Contents.swift */; };
+		B067214F2B92B7770078F143 /* GeometryElement+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B067214E2B92B7770078F143 /* GeometryElement+Utils.swift */; };
+		B06721512B92B7BE0078F143 /* GeometrySource+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06721502B92B7BE0078F143 /* GeometrySource+Utils.swift */; };
+		B06721532B92B9710078F143 /* SessionManager+PlaneDetection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06721522B92B9710078F143 /* SessionManager+PlaneDetection.swift */; };
+		B06721552B92B98A0078F143 /* SessionManager+SceneReconstruction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06721542B92B98A0078F143 /* SessionManager+SceneReconstruction.swift */; };
 		B0A2DD162B877B4C0032FBE0 /* AudioReactiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A2DD152B877B4C0032FBE0 /* AudioReactiveView.swift */; };
-		B0EE24262B911A99001AD834 /* EntityModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EE24252B911A99001AD834 /* EntityModel.swift */; };
+		B0EE24262B911A99001AD834 /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EE24252B911A99001AD834 /* SessionManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,8 +52,13 @@
 		B04239502B85560F004C8F39 /* CloudsEffect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloudsEffect.swift; sourceTree = "<group>"; };
 		B04239512B85560F004C8F39 /* AudioEffect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioEffect.swift; sourceTree = "<group>"; };
 		B04239522B85560F004C8F39 /* MagicEffect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MagicEffect.swift; sourceTree = "<group>"; };
+		B067214C2B92B7390078F143 /* MeshResource+Contents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MeshResource+Contents.swift"; sourceTree = "<group>"; };
+		B067214E2B92B7770078F143 /* GeometryElement+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GeometryElement+Utils.swift"; sourceTree = "<group>"; };
+		B06721502B92B7BE0078F143 /* GeometrySource+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GeometrySource+Utils.swift"; sourceTree = "<group>"; };
+		B06721522B92B9710078F143 /* SessionManager+PlaneDetection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SessionManager+PlaneDetection.swift"; sourceTree = "<group>"; };
+		B06721542B92B98A0078F143 /* SessionManager+SceneReconstruction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SessionManager+SceneReconstruction.swift"; sourceTree = "<group>"; };
 		B0A2DD152B877B4C0032FBE0 /* AudioReactiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioReactiveView.swift; sourceTree = "<group>"; };
-		B0EE24252B911A99001AD834 /* EntityModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityModel.swift; sourceTree = "<group>"; };
+		B0EE24252B911A99001AD834 /* SessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +102,7 @@
 		B00E178D2B8552D3003857AB /* VinylViz */ = {
 			isa = PBXGroup;
 			children = (
+				B067214B2B92B7220078F143 /* Extensions */,
 				B0EE24242B911A78001AD834 /* Models */,
 				B0A2DD142B877B260032FBE0 /* RealityViews */,
 				B042394C2B85560F004C8F39 /* Audio */,
@@ -148,6 +159,16 @@
 			path = Effects;
 			sourceTree = "<group>";
 		};
+		B067214B2B92B7220078F143 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				B067214C2B92B7390078F143 /* MeshResource+Contents.swift */,
+				B067214E2B92B7770078F143 /* GeometryElement+Utils.swift */,
+				B06721502B92B7BE0078F143 /* GeometrySource+Utils.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		B0A2DD142B877B260032FBE0 /* RealityViews */ = {
 			isa = PBXGroup;
 			children = (
@@ -159,7 +180,9 @@
 		B0EE24242B911A78001AD834 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				B0EE24252B911A99001AD834 /* EntityModel.swift */,
+				B0EE24252B911A99001AD834 /* SessionManager.swift */,
+				B06721522B92B9710078F143 /* SessionManager+PlaneDetection.swift */,
+				B06721542B92B98A0078F143 /* SessionManager+SceneReconstruction.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -267,15 +290,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B067214D2B92B7390078F143 /* MeshResource+Contents.swift in Sources */,
 				B04239552B85560F004C8F39 /* CloudsEffect.swift in Sources */,
+				B06721532B92B9710078F143 /* SessionManager+PlaneDetection.swift in Sources */,
 				B04239532B85560F004C8F39 /* AudioInputMonitor.swift in Sources */,
 				B0A2DD162B877B4C0032FBE0 /* AudioReactiveView.swift in Sources */,
-				B0EE24262B911A99001AD834 /* EntityModel.swift in Sources */,
+				B0EE24262B911A99001AD834 /* SessionManager.swift in Sources */,
+				B067214F2B92B7770078F143 /* GeometryElement+Utils.swift in Sources */,
 				B04239572B85560F004C8F39 /* MagicEffect.swift in Sources */,
 				B00E17952B8552D3003857AB /* ContentView.swift in Sources */,
 				B04239562B85560F004C8F39 /* AudioEffect.swift in Sources */,
 				B00E17932B8552D3003857AB /* VinylVizApp.swift in Sources */,
+				B06721512B92B7BE0078F143 /* GeometrySource+Utils.swift in Sources */,
 				B04239542B85560F004C8F39 /* AudioInputMonitor+Mapping.swift in Sources */,
+				B06721552B92B98A0078F143 /* SessionManager+SceneReconstruction.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
