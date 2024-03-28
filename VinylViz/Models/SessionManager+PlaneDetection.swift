@@ -29,7 +29,6 @@ extension SessionManager {
                     let modelEntity = ModelEntity(mesh: meshResource, materials: [OcclusionMaterial()])
                     modelEntity.transform = Transform(matrix: planeAnchor.originFromAnchorTransform)
                     modelEntity.name = "Plane"
-                        
                     if let customMaterial = customMaterial {
                         modelEntity.components[ModelComponent.self]?.materials = [customMaterial]
                     }

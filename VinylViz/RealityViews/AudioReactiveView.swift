@@ -27,7 +27,7 @@ struct AudioReactiveView: View {
                     content.add(scene)
                 }
                 
-                if let entity = content.entities.first?.findEntity(named: "AudioGeometryMaterialCube") {
+                if let entity = content.entities.first?.findEntity(named: "CustomMaterialCube") {
                     if let modelComponent = entity.components[ModelComponent.self] {
                         model.customMaterial = modelComponent.materials.first as? ShaderGraphMaterial
                     } else {
@@ -41,7 +41,25 @@ struct AudioReactiveView: View {
             } update: { content in
                 for effect in self.effects {
                     effect.configure(content: content, using: self.audioMonitor)
-                }                
+                }
+                if audioMonitor.engineOn {
+                    for entity in model.planeEntities {
+                        if let modelComponent = entity.value.components[ModelComponent.self] {
+                            if var material = modelComponent.materials.first as? ShaderGraphMaterial {
+                                do {
+                                    try material.setParameter(name: "audioLevel", value: .float(Float(self.audioMonitor.inputLevel)))
+                                } catch {
+                                    print("Error setting param on material")
+                                }
+                                entity.value.components[ModelComponent.self]?.materials = [material]
+                            } else {
+                                print("No material")
+                            }
+                        } else {
+                            print("could not find component")
+                        }
+                    }
+                }
             }
             .task {
                 do {
