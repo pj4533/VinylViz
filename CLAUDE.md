@@ -1,11 +1,10 @@
 # VinylViz Development Guide
 
 ## Build & Test Commands
-- Open project: `open VinylViz.xcodeproj`
-- Build: Cmd+B or Product > Build in Xcode
-- Run: Cmd+R or Product > Run in Xcode
-- Test: Cmd+U or Product > Test in Xcode
-- Run single test: Cmd+U with cursor in test method or Product > Test Selected
+- Build: `xcodebuild -project VinylViz.xcodeproj -scheme VinylViz -destination "platform=visionOS Simulator,name=Apple Vision Pro" build`
+- Run: `xcodebuild -project VinylViz.xcodeproj -scheme VinylViz -destination "platform=visionOS Simulator,name=Apple Vision Pro" run`
+- Test: `xcodebuild -project VinylViz.xcodeproj -scheme VinylViz -destination "platform=visionOS Simulator,name=Apple Vision Pro" test`
+- Test single class: `xcodebuild -project VinylViz.xcodeproj -scheme VinylViz -destination "platform=visionOS Simulator,name=Apple Vision Pro" test -only-testing:VinylVizTests/TestClassName`
 
 ## Code Style Guidelines
 - **Imports**: Group imports (Foundation, SwiftUI, RealityKit) with RealityKit-specific imports last
