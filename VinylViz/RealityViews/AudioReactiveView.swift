@@ -63,9 +63,28 @@ struct AudioReactiveView: View {
             }
             .task {
                 do {
-                    try await model.session.run([model.planeDetection])
+                    // Request world sensing authorization
+                    let authorizationResult = await model.session.requestAuthorization(for: [.worldSensing])
+                    
+                    // Check authorization status
+                    for (authorizationType, authorizationStatus) in authorizationResult {
+                        if authorizationStatus != .allowed {
+                            print("Authorization not granted for \(authorizationType): \(authorizationStatus)")
+                            return
+                        }
+                    }
+                    
+                    // Try to start the ARKit session with better error handling
+                    do {
+                        try await model.session.run([model.planeDetection])
+                        model.isSessionRunning = true
+                        print("ARKit session started successfully")
+                    } catch {
+                        print("Failed to start ARKit session: \(error)")
+                        model.sessionError = error
+                    }
                 } catch {
-                    print("Failed to start session: \(error)")
+                    print("Failed to request authorization: \(error)")
                 }
             }
             .task { //}(priority: .low) {
@@ -80,7 +99,10 @@ struct AudioReactiveView: View {
                 case .background:
                     // Code to run when the app is sent to the background
                     print("App is in the background.")
-                    // Add your code here
+                    Task {
+                        await model.stopSession()
+                    }
+                    self.audioMonitor.stopMonitoring()
                 case .active:
                     // Code to run when the app becomes active
                     print("App is active.")
@@ -88,6 +110,9 @@ struct AudioReactiveView: View {
                 case .inactive:
                     // Code to run when the app becomes inactive
                     print("App is inactive.")
+                    Task {
+                        await model.stopSession()
+                    }
                     self.audioMonitor.stopMonitoring()
                 @unknown default:
                     // A fallback for future cases not covered by the current enumeration
@@ -100,10 +125,16 @@ struct AudioReactiveView: View {
             if let message = audioMonitor.statusString {
                 Label(message, systemImage: "exclamationmark.triangle")
                     .padding(12)
-                    .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                    .font(.title)
                     .glassBackgroundEffect(in: .rect(cornerRadius: 50))
                     .opacity(audioMonitor.statusString != nil ? 1 : 0)
                     .animation(.easeInOut, value: audioMonitor.statusString != nil)
+            } else if let error = model.sessionError {
+                Label("ARKit error occurred", systemImage: "xmark.circle")
+                    .padding(12)
+                    .font(.title3)
+                    .foregroundColor(.red)
+                    .glassBackgroundEffect(in: .rect(cornerRadius: 50))
             }
         }
     }

@@ -6,6 +6,14 @@
 	<false/>
 	<key>NSWorldSensingUsageDescription</key>
 	<string>This app uses world sensing to render overlays on the world around you</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This app uses the microphone to react to audio in your environment</string>
+	<key>NSCameraUsageDescription</key>
+	<string>This app uses the camera to place effects in your environment</string>
+	<key>NSHandsTrackingUsageDescription</key>
+	<string>This app tracks your hands to allow interaction with audio visualizations</string>
+	<key>NSAudioSpatialCapturePolicyUsageDescription</key>
+	<string>This app uses spatial audio information to provide immersive visualizations</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationPreferredDefaultSceneSessionRole</key>
