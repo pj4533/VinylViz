@@ -8,6 +8,7 @@
 import SwiftUI
 import RealityKit
 import RealityKitContent
+import OSLog
 
 struct AudioSceneView: View {
     let audioMonitor: AudioInputMonitor
@@ -42,10 +43,10 @@ struct AudioSceneView: View {
                 if let modelComponent = entity.components[ModelComponent.self] {
                     model.customMaterial = modelComponent.materials.first as? ShaderGraphMaterial
                 } else {
-                    print("could not find component")
+                    Logger.Level.warning("Could not find model component for CustomMaterialCube", log: Logger.ui)
                 }
             } else {
-                print("could not find geometry material cube")
+                Logger.Level.error("Could not find CustomMaterialCube entity", log: Logger.ui)
             }
             
             content.add(model.contentEntity)
@@ -63,12 +64,12 @@ struct AudioSceneView: View {
         
         for entity in model.planeEntities {
             guard let modelComponent = entity.value.components[ModelComponent.self] else {
-                print("could not find component")
+                Logger.Level.warning("Could not find ModelComponent for plane entity [\(entity.key)]", log: Logger.effects)
                 continue
             }
             
             guard var material = modelComponent.materials.first as? ShaderGraphMaterial else {
-                print("No material")
+                Logger.Level.warning("No ShaderGraphMaterial found for plane entity [\(entity.key)]", log: Logger.effects)
                 continue
             }
             
@@ -76,7 +77,7 @@ struct AudioSceneView: View {
                 try material.setParameter(name: "audioLevel", value: .float(Float(self.audioMonitor.inputLevel)))
                 entity.value.components[ModelComponent.self]?.materials = [material]
             } catch {
-                print("Error setting param on material")
+                Logger.Level.error("Error setting audioLevel parameter on material: \(error)", log: Logger.effects)
             }
         }
     }
@@ -89,7 +90,7 @@ struct AudioSceneView: View {
             // Check authorization status
             for (authorizationType, authorizationStatus) in authorizationResult {
                 if authorizationStatus != .allowed {
-                    print("Authorization not granted for \(authorizationType): \(authorizationStatus)")
+                    Logger.Level.error("Authorization not granted for \(authorizationType): \(authorizationStatus)", log: Logger.session)
                     return
                 }
             }
@@ -98,13 +99,13 @@ struct AudioSceneView: View {
             do {
                 try await model.session.run([model.planeDetection])
                 model.isSessionRunning = true
-                print("ARKit session started successfully")
+                Logger.Level.info("ARKit session started successfully", log: Logger.session)
             } catch {
-                print("Failed to start ARKit session: \(error)")
+                Logger.Level.error("Failed to start ARKit session: \(error)", log: Logger.session)
                 model.sessionError = error
             }
         } catch {
-            print("Failed to request authorization: \(error)")
+            Logger.Level.error("Failed to request world sensing authorization: \(error)", log: Logger.session)
         }
     }
 }

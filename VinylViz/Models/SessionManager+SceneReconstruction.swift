@@ -8,6 +8,7 @@
 import ARKit
 import RealityKit
 import UIKit
+import OSLog
 
 // This code will build a mesh entity from the mesh anchors, but I found it slowed things down too much
 extension SessionManager {
@@ -18,6 +19,7 @@ extension SessionManager {
 
             switch update.event {
             case .added:
+                Logger.Level.debug("Mesh anchor added: [\(meshAnchor.id)]", log: Logger.session)
                 let color = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.95)
                 if let entity = try? self.generateModelEntity(geometry: meshAnchor.geometry, color: color) {
                     entity.transform = Transform(matrix: meshAnchor.originFromAnchorTransform)
@@ -29,14 +31,21 @@ extension SessionManager {
 
                     meshEntities[meshAnchor.id] = entity
                     contentEntity.addChild(entity)
+                } else {
+                    Logger.Level.warning("Failed to generate model entity for mesh anchor: [\(meshAnchor.id)]", log: Logger.session)
                 }
             case .updated:
-                guard let entity = meshEntities[meshAnchor.id] else { continue }
+                Logger.Level.debug("Mesh anchor updated: [\(meshAnchor.id)]", log: Logger.session)
+                guard let entity = meshEntities[meshAnchor.id] else { 
+                    Logger.Level.warning("Tried to update nonexistent mesh entity [\(meshAnchor.id)]", log: Logger.session)
+                    continue 
+                }
                 if let customMaterial = customMaterial {
                     entity.components[ModelComponent.self]?.materials = [customMaterial]
                 }
                 entity.transform = Transform(matrix: meshAnchor.originFromAnchorTransform)
             case .removed:
+                Logger.Level.debug("Mesh anchor removed: [\(meshAnchor.id)]", log: Logger.session)
                 meshEntities[meshAnchor.id]?.removeFromParent()
                 meshEntities.removeValue(forKey: meshAnchor.id)
             }
@@ -62,9 +71,14 @@ extension SessionManager {
             )
         }
 
-        let meshResource = try MeshResource.generate(from: [desc])
-        let material: Material = UnlitMaterial(color: color)
-        let modelEntity = ModelEntity(mesh: meshResource, materials: [material])
-        return modelEntity
+        do {
+            let meshResource = try MeshResource.generate(from: [desc])
+            let material: Material = UnlitMaterial(color: color)
+            let modelEntity = ModelEntity(mesh: meshResource, materials: [material])
+            return modelEntity
+        } catch {
+            Logger.Level.error("Failed to generate mesh resource: \(error)", log: Logger.session)
+            throw error
+        }
     }
 }

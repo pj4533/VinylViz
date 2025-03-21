@@ -8,6 +8,7 @@
 import SwiftUI
 import RealityKit
 import RealityKitContent
+import OSLog
 
 struct AudioReactiveView: View {
     @ObservedObject var audioMonitor = AudioInputMonitor()
@@ -41,22 +42,22 @@ struct AudioReactiveView: View {
     private func handleScenePhaseChange(from oldScenePhase: ScenePhase, to newScenePhase: ScenePhase) {
         switch newScenePhase {
         case .background:
-            print("App is in the background.")
+            Logger.Level.info("App is in the background", log: Logger.app)
             Task {
                 await model.stopSession()
             }
             self.audioMonitor.stopMonitoring()
         case .active:
-            print("App is active.")
+            Logger.Level.info("App is active", log: Logger.app)
             self.audioMonitor.startMonitoring()
         case .inactive:
-            print("App is inactive.")
+            Logger.Level.info("App is inactive", log: Logger.app)
             Task {
                 await model.stopSession()
             }
             self.audioMonitor.stopMonitoring()
         @unknown default:
-            print("Unknown scene phase.")
+            Logger.Level.warning("Unknown scene phase detected", log: Logger.app)
         }
     }
 }

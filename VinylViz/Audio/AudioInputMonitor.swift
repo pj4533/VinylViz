@@ -7,6 +7,7 @@
 
 import AVFoundation
 import Foundation
+import OSLog
 
 class AudioInputMonitor: ObservableObject {
     private var audioEngine: AVAudioEngine?
@@ -35,7 +36,7 @@ class AudioInputMonitor: ObservableObject {
                 if granted {
                     self.setupAudioSessionAndEngine()
                 } else {
-                    print("Microphone permission not granted")
+                    Logger.Level.warning("Microphone permission not granted", log: Logger.audio)
                     // Handle the case where permission is not granted
                 }
             }
@@ -43,7 +44,7 @@ class AudioInputMonitor: ObservableObject {
     }
     
     private func setupAudioSessionAndEngine() {
-        print("AudioInputMonitor::setupAudioSessionAndEngine()")
+        Logger.Level.debug("setupAudioSessionAndEngine()", log: Logger.audio)
         do {
             let audioSession = AVAudioSession.sharedInstance()
             try audioSession.setCategory(.playAndRecord, mode: .measurement, options: [])
@@ -51,16 +52,16 @@ class AudioInputMonitor: ObservableObject {
             
             self.setupAudioEngine()
         } catch {
-            print("Failed to set up the audio session: \(error)")
+            Logger.Level.error("Failed to set up the audio session: \(error)", log: Logger.audio)
         }
     }
     
     private func setupAudioEngine() {
-        print("AudioInputMonitor::setupAudioEngine()")
+        Logger.Level.debug("setupAudioEngine()", log: Logger.audio)
         audioEngine = AVAudioEngine()
         
         guard let inputNode = audioEngine?.inputNode else {
-            print("Failed to get the audio input node")
+            Logger.Level.error("Failed to get the audio input node", log: Logger.audio)
             return
         }
 
@@ -71,7 +72,10 @@ class AudioInputMonitor: ObservableObject {
     }
     
     private func analyzeAudio(buffer: AVAudioPCMBuffer) {
-        guard let channelData = buffer.floatChannelData else { return }
+        guard let channelData = buffer.floatChannelData else { 
+            Logger.Level.warning("No channel data available in audio buffer", log: Logger.audio)
+            return 
+        }
         
         let channelDataValue = channelData.pointee
         let channelDataValues = stride(from: 0,
@@ -87,16 +91,39 @@ class AudioInputMonitor: ObservableObject {
         
         DispatchQueue.main.async {
             self.inputLevel = normalizedLevel
+            
+            // Log significant audio level changes at debug level
+            if self.inputLevel > 0.7 {
+                Logger.Level.debug("High audio level detected: \(self.inputLevel)", log: Logger.audio)
+            }
+            
             if self.inputLevel < 0.1 {
                 self.numberOfQuietUpdates += 1
+                
+                if self.numberOfQuietUpdates == 5 {
+                    Logger.Level.info("Audio appears to have stopped (quiet for 5 updates)", log: Logger.audio)
+                }
             } else {
+                if self.numberOfQuietUpdates > 5 {
+                    Logger.Level.info("Audio detected after period of quiet", log: Logger.audio)
+                }
                 self.numberOfQuietUpdates = 0
             }
 
             if self.numberOfQuietUpdates <= 5 {
+                let wasAudioOn = self.audioOn
                 self.audioOn = true
+                
+                if !wasAudioOn {
+                    Logger.Level.info("Audio state changed: ON", log: Logger.audio)
+                }
             } else {
+                let wasAudioOn = self.audioOn
                 self.audioOn = false
+                
+                if wasAudioOn {
+                    Logger.Level.info("Audio state changed: OFF", log: Logger.audio)
+                }
             }
 
             // reset max if anything below 0.02 is heard -- not sure i like this
@@ -108,18 +135,18 @@ class AudioInputMonitor: ObservableObject {
     }
     
     private func startEngine() {
-        print("AudioInputMonitor::startEngine()")
+        Logger.Level.debug("startEngine()", log: Logger.audio)
         do {
             try audioEngine?.start()
             self.engineOn = true
         } catch {
             self.engineOn = false
-            print("Error starting audio engine: \(error.localizedDescription)")
+            Logger.Level.error("Error starting audio engine: \(error.localizedDescription)", log: Logger.audio)
         }
     }
 
     func startMonitoring() {
-        print("AudioInputMonitor::startMonitoring()")
+        Logger.Level.debug("startMonitoring()", log: Logger.audio)
         if self.audioEngine == nil {
             self.statusString = "Initializing audio engine..."
             requestMicrophonePermission()
@@ -131,7 +158,7 @@ class AudioInputMonitor: ObservableObject {
     }
 
     func stopMonitoring() {
-        print("AudioInputMonitor::stopMonitoring()")
+        Logger.Level.debug("stopMonitoring()", log: Logger.audio)
         audioEngine?.stop()
         self.engineOn = false
         audioEngine?.inputNode.removeTap(onBus: 0)
@@ -139,7 +166,7 @@ class AudioInputMonitor: ObservableObject {
         do {
             try AVAudioSession.sharedInstance().setActive(false)
         } catch {
-            print("Failed to deactivate audio session: \(error.localizedDescription)")
+            Logger.Level.error("Failed to deactivate audio session: \(error.localizedDescription)", log: Logger.audio)
         }
     }
 }

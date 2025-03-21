@@ -8,6 +8,7 @@
 import ARKit
 import RealityKit
 import UIKit
+import OSLog
 
 /// A model type that holds app state and processes updates from ARKit.
 @Observable
@@ -32,7 +33,7 @@ class SessionManager {
     var deviceSupportsARKit: Bool {
         #if targetEnvironment(simulator)
         // ARKit features may have limitations in simulator
-        print("Running in simulator - some ARKit features may not work as expected")
+        Logger.Level.warning("Running in simulator - some ARKit features may not work as expected", log: Logger.session)
         #endif
         
         return true
@@ -45,7 +46,7 @@ class SessionManager {
         // ARKitSession doesn't have a pause() method, 
         // but we can stop tracking by setting isSessionRunning flag
         isSessionRunning = false
-        print("ARKit session stopped")
+        Logger.Level.info("ARKit session stopped", log: Logger.session)
     }
 }
 
