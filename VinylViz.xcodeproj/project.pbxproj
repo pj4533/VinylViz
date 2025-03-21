@@ -3,28 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		B00E17912B8552D3003857AB /* RealityKitContent in Frameworks */ = {isa = PBXBuildFile; productRef = B00E17902B8552D3003857AB /* RealityKitContent */; };
-		B00E17932B8552D3003857AB /* VinylVizApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00E17922B8552D3003857AB /* VinylVizApp.swift */; };
-		B00E17952B8552D3003857AB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00E17942B8552D3003857AB /* ContentView.swift */; };
-		B00E179B2B8552D4003857AB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B00E179A2B8552D4003857AB /* Assets.xcassets */; };
-		B00E179E2B8552D4003857AB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B00E179D2B8552D4003857AB /* Preview Assets.xcassets */; };
 		B00E17A92B8552D4003857AB /* VinylVizTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00E17A82B8552D4003857AB /* VinylVizTests.swift */; };
-		B04239532B85560F004C8F39 /* AudioInputMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B042394D2B85560F004C8F39 /* AudioInputMonitor.swift */; };
-		B04239542B85560F004C8F39 /* AudioInputMonitor+Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = B042394E2B85560F004C8F39 /* AudioInputMonitor+Mapping.swift */; };
-		B04239552B85560F004C8F39 /* CloudsEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04239502B85560F004C8F39 /* CloudsEffect.swift */; };
-		B04239562B85560F004C8F39 /* AudioEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04239512B85560F004C8F39 /* AudioEffect.swift */; };
-		B04239572B85560F004C8F39 /* MagicEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04239522B85560F004C8F39 /* MagicEffect.swift */; };
-		B067214D2B92B7390078F143 /* MeshResource+Contents.swift in Sources */ = {isa = PBXBuildFile; fileRef = B067214C2B92B7390078F143 /* MeshResource+Contents.swift */; };
-		B067214F2B92B7770078F143 /* GeometryElement+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B067214E2B92B7770078F143 /* GeometryElement+Utils.swift */; };
-		B06721512B92B7BE0078F143 /* GeometrySource+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06721502B92B7BE0078F143 /* GeometrySource+Utils.swift */; };
-		B06721532B92B9710078F143 /* SessionManager+PlaneDetection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06721522B92B9710078F143 /* SessionManager+PlaneDetection.swift */; };
-		B06721552B92B98A0078F143 /* SessionManager+SceneReconstruction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06721542B92B98A0078F143 /* SessionManager+SceneReconstruction.swift */; };
-		B0A2DD162B877B4C0032FBE0 /* AudioReactiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A2DD152B877B4C0032FBE0 /* AudioReactiveView.swift */; };
-		B0EE24262B911A99001AD834 /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0EE24252B911A99001AD834 /* SessionManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,26 +24,23 @@
 /* Begin PBXFileReference section */
 		B00E178B2B8552D3003857AB /* VinylViz.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VinylViz.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B00E178F2B8552D3003857AB /* RealityKitContent */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = RealityKitContent; sourceTree = "<group>"; };
-		B00E17922B8552D3003857AB /* VinylVizApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VinylVizApp.swift; sourceTree = "<group>"; };
-		B00E17942B8552D3003857AB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		B00E179A2B8552D4003857AB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		B00E179D2B8552D4003857AB /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		B00E179F2B8552D4003857AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B00E17A42B8552D4003857AB /* VinylVizTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VinylVizTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B00E17A82B8552D4003857AB /* VinylVizTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VinylVizTests.swift; sourceTree = "<group>"; };
-		B042394D2B85560F004C8F39 /* AudioInputMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioInputMonitor.swift; sourceTree = "<group>"; };
-		B042394E2B85560F004C8F39 /* AudioInputMonitor+Mapping.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AudioInputMonitor+Mapping.swift"; sourceTree = "<group>"; };
-		B04239502B85560F004C8F39 /* CloudsEffect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloudsEffect.swift; sourceTree = "<group>"; };
-		B04239512B85560F004C8F39 /* AudioEffect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioEffect.swift; sourceTree = "<group>"; };
-		B04239522B85560F004C8F39 /* MagicEffect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MagicEffect.swift; sourceTree = "<group>"; };
-		B067214C2B92B7390078F143 /* MeshResource+Contents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MeshResource+Contents.swift"; sourceTree = "<group>"; };
-		B067214E2B92B7770078F143 /* GeometryElement+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GeometryElement+Utils.swift"; sourceTree = "<group>"; };
-		B06721502B92B7BE0078F143 /* GeometrySource+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GeometrySource+Utils.swift"; sourceTree = "<group>"; };
-		B06721522B92B9710078F143 /* SessionManager+PlaneDetection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SessionManager+PlaneDetection.swift"; sourceTree = "<group>"; };
-		B06721542B92B98A0078F143 /* SessionManager+SceneReconstruction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SessionManager+SceneReconstruction.swift"; sourceTree = "<group>"; };
-		B0A2DD152B877B4C0032FBE0 /* AudioReactiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioReactiveView.swift; sourceTree = "<group>"; };
-		B0EE24252B911A99001AD834 /* SessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		B03738B62D8D9497000ACE88 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = B00E178A2B8552D3003857AB /* VinylViz */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		B03738A42D8D9490000ACE88 /* VinylViz */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (B03738B62D8D9497000ACE88 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = VinylViz; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		B00E17882B8552D3003857AB /* Frameworks */ = {
@@ -83,7 +64,7 @@
 		B00E17822B8552D3003857AB = {
 			isa = PBXGroup;
 			children = (
-				B00E178D2B8552D3003857AB /* VinylViz */,
+				B03738A42D8D9490000ACE88 /* VinylViz */,
 				B00E178E2B8552D3003857AB /* Packages */,
 				B00E17A72B8552D4003857AB /* VinylVizTests */,
 				B00E178C2B8552D3003857AB /* Products */,
@@ -99,23 +80,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		B00E178D2B8552D3003857AB /* VinylViz */ = {
-			isa = PBXGroup;
-			children = (
-				B067214B2B92B7220078F143 /* Extensions */,
-				B0EE24242B911A78001AD834 /* Models */,
-				B0A2DD142B877B260032FBE0 /* RealityViews */,
-				B042394C2B85560F004C8F39 /* Audio */,
-				B042394F2B85560F004C8F39 /* Effects */,
-				B00E17922B8552D3003857AB /* VinylVizApp.swift */,
-				B00E17942B8552D3003857AB /* ContentView.swift */,
-				B00E179A2B8552D4003857AB /* Assets.xcassets */,
-				B00E179F2B8552D4003857AB /* Info.plist */,
-				B00E179C2B8552D4003857AB /* Preview Content */,
-			);
-			path = VinylViz;
-			sourceTree = "<group>";
-		};
 		B00E178E2B8552D3003857AB /* Packages */ = {
 			isa = PBXGroup;
 			children = (
@@ -124,67 +88,12 @@
 			path = Packages;
 			sourceTree = "<group>";
 		};
-		B00E179C2B8552D4003857AB /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				B00E179D2B8552D4003857AB /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
-			sourceTree = "<group>";
-		};
 		B00E17A72B8552D4003857AB /* VinylVizTests */ = {
 			isa = PBXGroup;
 			children = (
 				B00E17A82B8552D4003857AB /* VinylVizTests.swift */,
 			);
 			path = VinylVizTests;
-			sourceTree = "<group>";
-		};
-		B042394C2B85560F004C8F39 /* Audio */ = {
-			isa = PBXGroup;
-			children = (
-				B042394D2B85560F004C8F39 /* AudioInputMonitor.swift */,
-				B042394E2B85560F004C8F39 /* AudioInputMonitor+Mapping.swift */,
-			);
-			path = Audio;
-			sourceTree = "<group>";
-		};
-		B042394F2B85560F004C8F39 /* Effects */ = {
-			isa = PBXGroup;
-			children = (
-				B04239502B85560F004C8F39 /* CloudsEffect.swift */,
-				B04239512B85560F004C8F39 /* AudioEffect.swift */,
-				B04239522B85560F004C8F39 /* MagicEffect.swift */,
-			);
-			path = Effects;
-			sourceTree = "<group>";
-		};
-		B067214B2B92B7220078F143 /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				B067214C2B92B7390078F143 /* MeshResource+Contents.swift */,
-				B067214E2B92B7770078F143 /* GeometryElement+Utils.swift */,
-				B06721502B92B7BE0078F143 /* GeometrySource+Utils.swift */,
-			);
-			path = Extensions;
-			sourceTree = "<group>";
-		};
-		B0A2DD142B877B260032FBE0 /* RealityViews */ = {
-			isa = PBXGroup;
-			children = (
-				B0A2DD152B877B4C0032FBE0 /* AudioReactiveView.swift */,
-			);
-			path = RealityViews;
-			sourceTree = "<group>";
-		};
-		B0EE24242B911A78001AD834 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				B0EE24252B911A99001AD834 /* SessionManager.swift */,
-				B06721522B92B9710078F143 /* SessionManager+PlaneDetection.swift */,
-				B06721542B92B98A0078F143 /* SessionManager+SceneReconstruction.swift */,
-			);
-			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -201,6 +110,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				B03738A42D8D9490000ACE88 /* VinylViz */,
 			);
 			name = VinylViz;
 			packageProductDependencies = (
@@ -271,8 +183,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B00E179B2B8552D4003857AB /* Assets.xcassets in Resources */,
-				B00E179E2B8552D4003857AB /* Preview Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -290,20 +200,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B067214D2B92B7390078F143 /* MeshResource+Contents.swift in Sources */,
-				B04239552B85560F004C8F39 /* CloudsEffect.swift in Sources */,
-				B06721532B92B9710078F143 /* SessionManager+PlaneDetection.swift in Sources */,
-				B04239532B85560F004C8F39 /* AudioInputMonitor.swift in Sources */,
-				B0A2DD162B877B4C0032FBE0 /* AudioReactiveView.swift in Sources */,
-				B0EE24262B911A99001AD834 /* SessionManager.swift in Sources */,
-				B067214F2B92B7770078F143 /* GeometryElement+Utils.swift in Sources */,
-				B04239572B85560F004C8F39 /* MagicEffect.swift in Sources */,
-				B00E17952B8552D3003857AB /* ContentView.swift in Sources */,
-				B04239562B85560F004C8F39 /* AudioEffect.swift in Sources */,
-				B00E17932B8552D3003857AB /* VinylVizApp.swift in Sources */,
-				B06721512B92B7BE0078F143 /* GeometrySource+Utils.swift in Sources */,
-				B04239542B85560F004C8F39 /* AudioInputMonitor+Mapping.swift in Sources */,
-				B06721552B92B98A0078F143 /* SessionManager+SceneReconstruction.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -502,7 +398,6 @@
 		B00E17B02B8552D4003857AB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -523,7 +418,6 @@
 		B00E17B12B8552D4003857AB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
