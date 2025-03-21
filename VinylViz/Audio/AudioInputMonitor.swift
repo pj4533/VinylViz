@@ -1,6 +1,6 @@
 //
 //  AudioInputMonitor.swift
-//  ParticleVolumeTest
+//  VinylViz
 //
 //  Created by PJ Gray on 2/17/24.
 //
@@ -9,164 +9,127 @@ import AVFoundation
 import Foundation
 import OSLog
 
+/// Monitors audio input from the microphone and publishes audio levels and state
 class AudioInputMonitor: ObservableObject {
-    private var audioEngine: AVAudioEngine?
+    // MARK: - Dependencies
     
+    private let engineController = AudioEngineController()
+    
+    // MARK: - Audio Processing State
+    
+    /// Tracks the maximum observed audio level for adaptive scaling
     var maxObservedLevel: Float = 0.00001
+    
+    /// Tracks consecutive audio samples below the quiet threshold
     var numberOfQuietUpdates = 10
-
-    /// A float representing the current level of loudness of the audio
+    
+    // MARK: - Published Properties
+    
+    /// The current audio input level from 0 to 1
     @Published var inputLevel: Float = 0
     
-    /// A boolean representing whether audio is on -- if a inputLevel of less than 0.1 is recorded 5 times in a row, this flips true
+    /// Whether audio is currently detected (based on thresholds)
     @Published var audioOn: Bool = false
-        
-    /// A status string message to display in the UI
+    
+    /// Status message to display in the UI
     @Published var statusString: String? = nil
     
-    /// A simple bool for if the engine is on, so I don't need to publish the entire engine variable
+    /// Whether the audio engine is currently running
     @Published var engineOn: Bool = false
     
+    // MARK: - Initialization
+    
     init() {
-    }
-    
-    private func requestMicrophonePermission() {
-        AVAudioApplication.requestRecordPermission { granted in
-            DispatchQueue.main.async {
-                if granted {
-                    self.setupAudioSessionAndEngine()
-                } else {
-                    Logger.Level.warning("Microphone permission not granted", log: Logger.audio)
-                    // Handle the case where permission is not granted
-                }
-            }
+        engineController.onAudioBufferReceived = { [weak self] buffer in
+            self?.processAudioBuffer(buffer)
         }
     }
     
-    private func setupAudioSessionAndEngine() {
-        Logger.Level.debug("setupAudioSessionAndEngine()", log: Logger.audio)
-        do {
-            let audioSession = AVAudioSession.sharedInstance()
-            try audioSession.setCategory(.playAndRecord, mode: .measurement, options: [])
-            try audioSession.setActive(true)
-            
-            self.setupAudioEngine()
-        } catch {
-            Logger.Level.error("Failed to set up the audio session: \(error)", log: Logger.audio)
-        }
-    }
+    // MARK: - Public Methods
     
-    private func setupAudioEngine() {
-        Logger.Level.debug("setupAudioEngine()", log: Logger.audio)
-        audioEngine = AVAudioEngine()
-        
-        guard let inputNode = audioEngine?.inputNode else {
-            Logger.Level.error("Failed to get the audio input node", log: Logger.audio)
-            return
-        }
-
-        let recordingFormat = inputNode.outputFormat(forBus: 0)
-        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { [weak self] (buffer, _) in
-            self?.analyzeAudio(buffer: buffer)
-        }
-    }
-    
-    private func analyzeAudio(buffer: AVAudioPCMBuffer) {
-        guard let channelData = buffer.floatChannelData else { 
-            Logger.Level.warning("No channel data available in audio buffer", log: Logger.audio)
-            return 
-        }
-        
-        let channelDataValue = channelData.pointee
-        let channelDataValues = stride(from: 0,
-                                       to: Int(buffer.frameLength),
-                                       by: buffer.stride).map { channelDataValue[$0] }
-        
-        let rms = sqrt(channelDataValues.map { $0 * $0 }.reduce(0, +) / Float(buffer.frameLength))
-        let avgPower = 20 * log10(rms)
-        
-        // playing with these numbers a bit...
-        let adjustedPower = max(avgPower, -50.0) // Use -50 dB as a floor
-        let normalizedLevel = (adjustedPower + 50.0) / 50.0 // Normalize to 0...1
-        
-        DispatchQueue.main.async {
-            self.inputLevel = normalizedLevel
-            
-            // Log significant audio level changes at debug level
-            if self.inputLevel > 0.7 {
-                Logger.Level.debug("High audio level detected: \(self.inputLevel)", log: Logger.audio)
-            }
-            
-            if self.inputLevel < 0.1 {
-                self.numberOfQuietUpdates += 1
-                
-                if self.numberOfQuietUpdates == 5 {
-                    Logger.Level.info("Audio appears to have stopped (quiet for 5 updates)", log: Logger.audio)
-                }
-            } else {
-                if self.numberOfQuietUpdates > 5 {
-                    Logger.Level.info("Audio detected after period of quiet", log: Logger.audio)
-                }
-                self.numberOfQuietUpdates = 0
-            }
-
-            if self.numberOfQuietUpdates <= 5 {
-                let wasAudioOn = self.audioOn
-                self.audioOn = true
-                
-                if !wasAudioOn {
-                    Logger.Level.info("Audio state changed: ON", log: Logger.audio)
-                }
-            } else {
-                let wasAudioOn = self.audioOn
-                self.audioOn = false
-                
-                if wasAudioOn {
-                    Logger.Level.info("Audio state changed: OFF", log: Logger.audio)
-                }
-            }
-
-            // reset max if anything below 0.02 is heard -- not sure i like this
-            if self.inputLevel < 0.02 {
-                self.maxObservedLevel = 0.00001
-            }
-            self.maxObservedLevel = max(self.maxObservedLevel, self.inputLevel)
-        }
-    }
-    
-    private func startEngine() {
-        Logger.Level.debug("startEngine()", log: Logger.audio)
-        do {
-            try audioEngine?.start()
-            self.engineOn = true
-        } catch {
-            self.engineOn = false
-            Logger.Level.error("Error starting audio engine: \(error.localizedDescription)", log: Logger.audio)
-        }
-    }
-
+    /// Starts audio monitoring if not already running
     func startMonitoring() {
         Logger.Level.debug("startMonitoring()", log: Logger.audio)
-        if self.audioEngine == nil {
-            self.statusString = "Initializing audio engine..."
-            requestMicrophonePermission()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-                self.startEngine()
-                self.statusString = nil
+        if !engineController.isRunning {
+            statusString = "Initializing audio engine..."
+            engineController.requestPermissionAndSetup { [weak self] success in
+                guard let self = self, success else { return }
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                    if self.engineController.start() {
+                        self.engineOn = true
+                        self.statusString = nil
+                    }
+                }
             }
         }
     }
 
+    /// Stops audio monitoring
     func stopMonitoring() {
         Logger.Level.debug("stopMonitoring()", log: Logger.audio)
-        audioEngine?.stop()
-        self.engineOn = false
-        audioEngine?.inputNode.removeTap(onBus: 0)
-        audioEngine = nil
-        do {
-            try AVAudioSession.sharedInstance().setActive(false)
-        } catch {
-            Logger.Level.error("Failed to deactivate audio session: \(error.localizedDescription)", log: Logger.audio)
+        engineController.stop()
+        engineOn = false
+    }
+    
+    // MARK: - Private Methods
+    
+    /// Processes an audio buffer to extract and publish audio metrics
+    private func processAudioBuffer(_ buffer: AVAudioPCMBuffer) {
+        guard let normalizedLevel = AudioAnalyzer.extractLevel(from: buffer) else { return }
+        
+        DispatchQueue.main.async {
+            self.updateAudioLevel(normalizedLevel)
         }
+    }
+    
+    /// Updates audio level and state based on the normalized level
+    private func updateAudioLevel(_ level: Float) {
+        self.inputLevel = level
+        
+        // Log significant audio level changes
+        if level > 0.7 {
+            Logger.Level.debug("High audio level detected: \(level)", log: Logger.audio)
+        }
+        
+        updateAudioActivity(level)
+        updateMaxLevel(level)
+    }
+    
+    /// Updates the audio activity state based on current level
+    private func updateAudioActivity(_ level: Float) {
+        // Determine if audio is quiet based on threshold
+        if level < 0.1 {
+            numberOfQuietUpdates += 1
+            
+            if numberOfQuietUpdates == 5 {
+                Logger.Level.info("Audio appears to have stopped (quiet for 5 updates)", log: Logger.audio)
+            }
+        } else {
+            if numberOfQuietUpdates > 5 {
+                Logger.Level.info("Audio detected after period of quiet", log: Logger.audio)
+            }
+            numberOfQuietUpdates = 0
+        }
+        
+        // Update audioOn state
+        let wasAudioOn = audioOn
+        audioOn = numberOfQuietUpdates <= 5
+        
+        // Log state changes
+        if audioOn != wasAudioOn {
+            Logger.Level.info("Audio state changed: \(audioOn ? "ON" : "OFF")", log: Logger.audio)
+        }
+    }
+    
+    /// Updates the maximum observed level for adaptive scaling
+    private func updateMaxLevel(_ level: Float) {
+        // Reset max if level is very low
+        if level < 0.02 {
+            maxObservedLevel = 0.00001
+        }
+        
+        // Update max observed level
+        maxObservedLevel = max(maxObservedLevel, level)
     }
 }
