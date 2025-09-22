@@ -1,18 +1,87 @@
 # VinylViz Development Guide
 
-## Build & Test Commands
-- Build: `xcodebuild -project VinylViz.xcodeproj -scheme VinylViz -destination "platform=visionOS Simulator,name=Apple Vision Pro" build`
-- Run: `xcodebuild -project VinylViz.xcodeproj -scheme VinylViz -destination "platform=visionOS Simulator,name=Apple Vision Pro" run`
-- Test: `xcodebuild -project VinylViz.xcodeproj -scheme VinylViz -destination "platform=visionOS Simulator,name=Apple Vision Pro" test`
-- Test single class: `xcodebuild -project VinylViz.xcodeproj -scheme VinylViz -destination "platform=visionOS Simulator,name=Apple Vision Pro" test -only-testing:VinylVizTests/TestClassName`
+## Project Overview
+VinylViz is a multiplatform music visualization and discovery application that combines audio-reactive visuals with AI-powered music knowledge and recommendations. The project is transitioning from a passive visionOS visualization experience to an active, interactive music discovery platform across Apple devices.
 
-## Code Style Guidelines
-- **Imports**: Group imports (Foundation, SwiftUI, RealityKit) with RealityKit-specific imports last
+## Project Structure
+- **visionOS/**: Original immersive visualization experience for Apple Vision Pro
+- **iOS/**: Active listening experience with AI-powered discovery (primary focus)
+- **docs/**: Project documentation and planning documents
+
+## Key Technologies
+- **ShazamKit**: Automatic song identification
+- **OpenAI API**: Conversational AI for music facts and recommendations
+- **Apple Music/MusicKit**: Library integration and music playback
+- **Core Audio**: Real-time audio analysis for visualizations
+
+## Development Philosophy
+- **Active Engagement**: Transform passive listening into interactive discovery
+- **AI Personality**: "Stoned friend with encyclopedic music knowledge" - knowledgeable but approachable
+- **Simple Interactions**: Binary choices only (A or B) for all user questions
+- **Progressive Learning**: System gets smarter about user preferences over time
+- **Deep Discovery**: Surface obscure gems alongside accessible recommendations
+
+## Platform-Specific Guidelines
+
+### iOS Development
+- Focus on responsive touch interactions
+- Optimize visualizations for mobile performance
+- Design for both portrait and landscape orientations
+- Implement background audio handling appropriately
+- Consider battery optimization for long listening sessions
+
+### visionOS Development
+- See visionOS/CLAUDE.md for Vision Pro specific guidelines
+- Maintain existing immersive experience
+- Consider future integration with iOS preference data
+
+## Code Style Guidelines (All Platforms)
+- **Imports**: Group imports logically (Foundation, SwiftUI, third-party)
 - **Naming**: Use descriptive camelCase for variables, PascalCase for types
-- **Documentation**: Use /// for property and method documentation
-- **Error Handling**: Use do/catch blocks with specific error messages printed to console
-- **Async**: Use Swift concurrency (async/await) for asynchronous operations
-- **Logging**: Use print statements with class/method prefix (e.g., "AudioInputMonitor::startEngine()")
-- **SwiftUI**: Prefer environment over direct injection when appropriate
-- **Access Control**: Mark helpers as private, public API as internal (default)
-- **Comments**: Use // for implementation comments, /// for documentation
+- **Documentation**: Use /// for public API documentation
+- **Error Handling**: Comprehensive error handling with user-friendly messages
+- **Async**: Use Swift concurrency (async/await) throughout
+- **Logging**: Structured logging using OSLog framework
+- **Architecture**: Clean separation of concerns (UI, Business Logic, Data)
+
+## AI Integration Guidelines
+- **OpenAI Prompting**: Maintain consistent personality across all interactions
+- **Question Generation**: Maximum 10 words, always binary choice
+- **Fact Delivery**: Short, punchy, interesting - never overwhelming
+- **Recommendations**: Balance familiarity with discovery, adapt to user engagement level
+- **Context Preservation**: Maintain conversation context within listening sessions
+
+## Data Management
+- **User Preferences**: Store locally with proper encryption
+- **Question History**: Track all interactions for preference learning
+- **Recommendation Cache**: Store recent suggestions for offline access
+- **Privacy First**: Never share user data without explicit consent
+
+## Testing Approach
+- Unit tests for preference learning algorithms
+- Integration tests for API connections (ShazamKit, OpenAI, MusicKit)
+- UI tests for critical user flows
+- Performance tests for visualization smoothness
+
+## Build & Deploy
+- Each platform has its own Xcode project/workspace
+- Use Swift Package Manager for shared dependencies
+- Follow platform-specific build instructions in respective folders
+- Ensure all API keys are properly configured in environment
+
+## Important Reminders
+- Never commit API keys or secrets to the repository
+- Test on real devices when possible (especially for audio features)
+- Consider accessibility from the start (VoiceOver, Dynamic Type)
+- Respect Apple's Human Interface Guidelines per platform
+- Keep visualizations performant to maintain 60+ FPS
+
+## Current Development Status
+- ✅ visionOS: Complete and functional
+- 🚧 iOS: In active development
+- 📋 tvOS: Planned for future
+
+## Documentation
+- See `docs/vinylviz_multiplatform_update.md` for detailed expansion plans
+- Platform-specific documentation in respective folders
+- API integration guides in docs folder as needed
