@@ -3,6 +3,19 @@
 ## Project Overview
 VinylViz is a multiplatform music visualization and discovery application that combines audio-reactive visuals with AI-powered music knowledge and recommendations. The project is transitioning from a passive visionOS visualization experience to an active, interactive music discovery platform across Apple devices.
 
+### Quick Summary
+VinylViz transforms music listening into an interactive experience by:
+1. **Identifying** songs in real-time using ShazamKit
+2. **Visualizing** audio with stunning reactive graphics
+3. **Conversing** with an AI music buddy that shares facts and asks preference questions
+4. **Learning** user tastes through simple A/B choice questions
+5. **Discovering** personalized music recommendations from mainstream to obscure gems
+
+The iOS app features three main tabs: Live Listening (real-time visualizations + AI chat), Suggestions (personalized recommendations), and Settings.
+
+### Full Project Documentation
+For complete details about the project vision, architecture, and implementation plans, see: **`docs/vinylviz_multiplatform_update.md`**
+
 ## Project Structure
 - **visionOS/**: Original immersive visualization experience for Apple Vision Pro
 - **iOS/**: Active listening experience with AI-powered discovery (primary focus)
@@ -24,6 +37,7 @@ VinylViz is a multiplatform music visualization and discovery application that c
 ## Platform-Specific Guidelines
 
 ### iOS Development
+- **Target iOS 26** - Always use the latest Apple APIs and SwiftUI features
 - Focus on responsive touch interactions
 - Optimize visualizations for mobile performance
 - Design for both portrait and landscape orientations
@@ -36,6 +50,7 @@ VinylViz is a multiplatform music visualization and discovery application that c
 - Consider future integration with iOS preference data
 
 ## Code Style Guidelines (All Platforms)
+- **API Usage**: Always use the latest Apple APIs available in iOS 26/visionOS 2
 - **Imports**: Group imports logically (Foundation, SwiftUI, third-party)
 - **Naming**: Use descriptive camelCase for variables, PascalCase for types
 - **Documentation**: Use /// for public API documentation
