@@ -8,14 +8,22 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State var selectedTab = "live"
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        TabView(selection: $selectedTab) {
+            Tab("Live Listening", systemImage: "waveform.circle", value: "live") {
+                LiveListeningView()
+            }
+
+            Tab("Suggestions", systemImage: "sparkles.rectangle.stack", value: "suggestions") {
+                SuggestionsView()
+            }
+
+            Tab("Settings", systemImage: "gearshape", value: "settings") {
+                SettingsView()
+            }
         }
-        .padding()
     }
 }
 
