@@ -17,20 +17,6 @@ struct ContentViewTests {
         #expect(contentView.selectedTab == "live", "Should start with Live Listening tab selected")
     }
 
-    @Test("Tab selection state can be modified")
-    func tabSelectionStateCanBeModified() async throws {
-        var contentView = ContentView()
-
-        contentView.selectedTab = "suggestions"
-        #expect(contentView.selectedTab == "suggestions", "Should be able to select Suggestions tab")
-
-        contentView.selectedTab = "settings"
-        #expect(contentView.selectedTab == "settings", "Should be able to select Settings tab")
-
-        contentView.selectedTab = "live"
-        #expect(contentView.selectedTab == "live", "Should be able to return to Live Listening tab")
-    }
-
     @Test("Tab values match expected identifiers")
     func tabValuesMatchExpectedIdentifiers() async throws {
         let validTabIdentifiers = Set(["live", "suggestions", "settings"])

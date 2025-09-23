@@ -73,10 +73,17 @@ For complete details about the project vision, architecture, and implementation 
 - **Privacy First**: Never share user data without explicit consent
 
 ## Testing Approach
+- **Framework**: Always use Swift Testing (not XCTest) - we're targeting iOS 26 so use the latest testing technology
 - Unit tests for preference learning algorithms
 - Integration tests for API connections (ShazamKit, OpenAI, MusicKit)
-- UI tests for critical user flows
 - Performance tests for visualization smoothness
+- **NO UI Tests**: Focus on fast-running unit tests only for quick feedback loops
+- Keep code coverage enabled to ensure good test coverage
+
+### Swift Testing Documentation
+When referencing Swift Testing documentation, use Sosumi:
+- **Swift Testing**: https://sosumi.ai/documentation/testing
+- **Swift Testing Overview**: https://sosumi.ai/xcode/swift-testing
 
 ## Build & Deploy
 - Each platform has its own Xcode project/workspace
